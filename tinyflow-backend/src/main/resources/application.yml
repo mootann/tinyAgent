@@ -1,0 +1,82 @@
+spring:
+  application:
+    name: tinyflow-backend
+
+  # Database Configuration
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:106.52.232.30}:${MYSQL_PORT:3306}/${MYSQL_DB:tinyflow}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:Mt04064510}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 580000
+      connection-test-query: SELECT 1
+      validation-timeout: 5000
+
+  ai:
+    openai:
+      # Use DeepSeek API (OpenAI compatible)
+      api-key: ${DEEPSEEK_API_KEY:${OPENAI_API_KEY:}}
+      base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+      chat:
+        options:
+          model: ${DEFAULT_MODEL:deepseek-chat}
+          temperature: 0.7
+
+server:
+  port: 8000
+
+# TinyFlow Configuration
+tinyflow:
+  model:
+    default: ${DEFAULT_MODEL:gpt-4o-mini}
+    providers:
+      - name: openai
+        api-key-env: OPENAI_API_KEY
+      - name: deepseek
+        api-key-env: DEEPSEEK_API_KEY
+      - name: anthropic
+        api-key-env: ANTHROPIC_API_KEY
+
+  executor:
+    scheduler-workers: 3
+    execution-workers: 3
+    default-timeout: 300
+
+  memory:
+    token-budget: 500
+    decay-days: 30
+    decay-factor: 0.8
+    min-confidence: 0.7
+    max-facts: 50
+    storage-type: markdown
+    storage-path: ./data/memory
+
+  checkpoint:
+    ttl-hours: 24
+
+  skills:
+    dirs:
+      - skills/
+    hot-reload: true
+
+  graph:
+    max-iterations: 3
+
+  data:
+    dir: ./data
+
+# Tavily Search API
+tavily:
+  api:
+    key: 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
+
+# Logging
+logging:
+  level:
+    com.tinyflow: INFO
+    org.bsc.langgraph4j: INFO

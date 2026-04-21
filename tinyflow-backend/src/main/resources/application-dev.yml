@@ -1,0 +1,13 @@
+# Development configuration
+spring:
+  application:
+    name: tinyflow-backend
+
+server:
+  port: 8000
+
+# Logging
+logging:
+  level:
+    com.tinyflow: INFO
+    org.springframework.web: INFO

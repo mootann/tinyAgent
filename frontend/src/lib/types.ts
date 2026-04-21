@@ -1,0 +1,69 @@
+export type SSEEventType =
+  | "thinking"
+  | "content"
+  | "tool_call"
+  | "tool_result"
+  | "subagent_status"
+  | "subagent_result"
+  | "memory_update"
+  | "todo_update"
+  | "mode_selected"
+  | "loop_warning"
+  | "context_compacted"
+  | "done"
+  | "error";
+
+export interface AgentStep {
+  id: string;
+  type: "thinking" | "tool_call" | "tool_result" | "subagent_status" | "subagent_done";
+  content: string;
+  status?: "running" | "completed" | "failed";
+  timestamp: number;
+}
+
+export interface Message {
+  id: string;
+  role: "user" | "assistant" | "processing";
+  content: string;
+  thinking?: string;
+  toolCalls?: ToolCallInfo[];
+  timestamp: number;
+}
+
+export interface ToolCallInfo {
+  name: string;
+  query: string;
+  preview?: string;
+}
+
+export interface SubagentTask {
+  taskId: string;
+  status: "pending" | "running" | "completed" | "failed" | "timed_out";
+  type: string;
+  label?: string;
+  output?: string;
+}
+
+export interface MemoryFact {
+  id: string;
+  content: string;
+  category: string;
+  confidence: number;
+}
+
+export interface Thread {
+  thread_id?: string;
+  threadId?: string;
+  title?: string;
+  updated_at?: string;
+  updatedAt?: string;
+}
+
+export type ExecutionMode = "flash" | "thinking" | "pro" | "ultra";
+
+export interface TodoItem {
+  id: string;
+  content: string;
+  status: "pending" | "in_progress" | "completed" | "failed";
+  error?: string;
+}
